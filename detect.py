@@ -11,7 +11,7 @@ from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
     scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from utils.plots import plot_one_box, plot_one_blox_with_OCR
+from utils.plots import plot_one_box, plot_one_blox_with_OCR_easy_ocr, plot_one_blox_with_OCR_tesseract
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 
 
@@ -128,7 +128,7 @@ def detect():
 
                     if save_img or view_img:  # Add bbox to image
                         label = f'{names[int(cls)]} {conf:.2f}'
-                        plot_one_blox_with_OCR(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
+                        plot_one_blox_with_OCR_tesseract(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
@@ -162,7 +162,7 @@ def detect():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='data/yolov7_plate_number.pt', help='model.pt path(s)')
-    parser.add_argument('--source', type=str, default='data/plate_detect_video.mp4', help='source')
+    parser.add_argument('--source', type=str, default='./inference/images/test_range.jpg', help='source')
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
