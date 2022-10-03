@@ -4,8 +4,9 @@
 
 ``` shell
 # apt install required packages
-apt update
-apt install -y zip htop screen libgl1-mesa-glx tesseract pipenv
+sudo apt update
+sudo apt install -y zip htop screen libgl1-mesa-glx tesseract-ocr pipenv
+  
 
 # create virtualenv:  
 pipenv install
