@@ -81,16 +81,14 @@ def plot_one_blox_with_OCR_tesseract(x, img, color=None, label=None, line_thickn
         img_plate = img[c1[1]:c2[1], c1[0]:c2[0]]
         img_plate = prepare_photo_for_OCR(img_plate)
         img_plate_string = pt.image_to_string(img_plate, lang='rus+eng') #
-        print('----')
-        print(img_plate_string)
-        print('----') 
-        # img_plate_string = convert_to_string(img_plate_string)
+        img_plate_string = convert_to_string(img_plate_string)
         tf = max(tl - 1, 1)  # font thickness
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
-        cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+        print(c1, c2)
+        # cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
         if len(img_plate_string) > 0:
-            cv2.putText(img, f'plate: {img_plate_string}', (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+            cv2.putText(img, f'plt: {img_plate_string}', (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
 
 def plot_one_blox_with_OCR_easy_ocr(x, img, color=None, label=None, line_thickness=3):
@@ -102,13 +100,13 @@ def plot_one_blox_with_OCR_easy_ocr(x, img, color=None, label=None, line_thickne
     if label:
         img_plate = img[c1[1]:c2[1], c1[0]:c2[0]]
         # img_plate = prepare_photo_for_OCR(img_plate)
-        img_plate_string = READER.readtext(img_plate.astype('uint8') * 255, detail=0)
-        # if len(img_plate_string) == 0:
-        #     img_plate_string = ''
-        # else:
-        #     img_plate_string = img_plate_string[0]
-        cv2.imshow('Amanda', img_plate)
-        cv2.waitKey(10000)
+        img_plate_string = READER.readtext(img_plate, detail=0)
+        if len(img_plate_string) == 0:
+            img_plate_string = ''
+        else:
+            img_plate_string = img_plate_string[0]
+        # cv2.imshow('Amanda', img_plate)
+        # cv2.waitKey(10000)
         cv2.destroyAllWindows()
         print('----')
         print(img_plate_string)
@@ -118,7 +116,7 @@ def plot_one_blox_with_OCR_easy_ocr(x, img, color=None, label=None, line_thickne
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
         # cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
-        # cv2.putText(img, f'plate: {img_plate_string}', (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+        cv2.putText(img, f'plt: {img_plate_string}', (c1[0], c1[1] - 2), cv2.FONT_HERSHEY_COMPLEX, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
 
 def prepare_photo_for_OCR(img):
@@ -133,9 +131,9 @@ def prepare_photo_for_OCR(img):
 
 def convert_to_string(plate_number):
     """ 
-    remove symbols
+    remove unnecessary symbols
     """
-    plate_number = [i for i in list(plate_number) if i.isdigit() or i.isalpha()]
+    plate_number = [symbol for symbol in list(plate_number) if symbol.isdigit() or symbol.isalpha()]
     plate_number = ''.join(plate_number)  # convert list_to_string
     return plate_number
     
