@@ -127,8 +127,7 @@ def detect():
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
                     if save_img or view_img:  # Add bbox to image
-                        label = f'{names[int(cls)]} {conf:.2f}'
-                        plot_one_blox_with_OCR_easy_ocr(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
+                        plot_one_blox_with_OCR_easy_ocr(xyxy, im0, color=[214, 186, 114], line_thickness=1)
 
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
@@ -161,7 +160,7 @@ def detect():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='data/yolov7_plate_number.pt', help='model.pt path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default='inference/yolov7_plate_number.pt', help='model.pt path(s)')
     parser.add_argument('--source', type=str, default='./inference/images/test_range.jpg', help='source')
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
