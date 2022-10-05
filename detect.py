@@ -58,7 +58,6 @@ def detect():
 
     # Get names and colors
     names = model.module.names if hasattr(model, 'module') else model.names
-    colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
 
     # Run inference
     if device.type != 'cpu':
@@ -70,7 +69,7 @@ def detect():
     counter = 0
     for path, img, im0s, vid_cap in dataset:
         counter += 1
-        if counter % 10 != 0 and len(dataset) > 10: continue
+        if counter % 3 != 0 and counter > 1: continue
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
@@ -127,7 +126,7 @@ def detect():
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
                     if save_img or view_img:  # Add bbox to image
-                        plot_one_blox_with_OCR_easy_ocr(xyxy, im0, color=[214, 186, 114], line_thickness=1)
+                        plot_one_blox_with_OCR_easy_ocr(xyxy, im0, color=[214, 186, 114], line_thickness=3)
 
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
@@ -160,8 +159,8 @@ def detect():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='inference/yolov7_plate_number.pt', help='model.pt path(s)')
-    parser.add_argument('--source', type=str, default='./inference/images/test_range.jpg', help='source')
+    parser.add_argument('--weights', nargs='+', type=str, default='inference/best_10_epoch.pt', help='model.pt path(s)')
+    parser.add_argument('--source', type=str, default='./inference/IMG_6900.MOV', help='source')
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
