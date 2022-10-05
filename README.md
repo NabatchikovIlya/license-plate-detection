@@ -43,7 +43,7 @@ RoboFlow: [link1](https://universe.roboflow.com/public-workspace-n6wxn/license-p
 
 ## Architecture
 
-![](./figure/arch.jpg)
+!['car'](./figure/arch.jpg)
 
 Object detector + OCR system. \
 As a detector we used: YOLOv5 and YOLOv7 \
