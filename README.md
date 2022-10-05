@@ -43,8 +43,6 @@ RoboFlow: [link1](https://universe.roboflow.com/public-workspace-n6wxn/license-p
 
 ## Architecture
 
-!['car'](./figure/arch.jpg)
-
 Object detector + OCR system. \
 As a detector we used: YOLOv5 and YOLOv7 \
 As an OCR system we used: PyTesseract and EasyOCR
