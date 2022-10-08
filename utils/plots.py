@@ -27,7 +27,7 @@ from utils.metrics import fitness
 matplotlib.rc('font', **{'size': 11})
 matplotlib.use('Agg')  # for writing to files only
 
-READER = easyocr.Reader(['ru', 'en'])
+READER = easyocr.Reader(['en'])
 
 def color_list():
     # Return first 10 plt colors as (r,g,b) https://stackoverflow.com/questions/51350872/python-from-color-name-to-rgb
@@ -70,53 +70,42 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=3):
         cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
         cv2.putText(img, "label", (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
-def plot_one_blox_with_OCR_tesseract(x, img, color=None, label=None, line_thickness=3):
-    # Plots one bounding box on image img
+def plot_one_blox_with_OCR_tesseract(x, img, color, line_thickness=3):
+    """
+    Recognition of the car number plate based on PyTesseract.
+    Drawing one bounding box and OCR result
+    """
     tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
-    color = color or [random.randint(0, 255) for _ in range(3)]
-    c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
-    print(c1, c2)
-    cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
-    if label:
-        img_plate = img[c1[1]:c2[1], c1[0]:c2[0]]
-        img_plate = prepare_photo_for_OCR(img_plate)
-        img_plate_string = pt.image_to_string(img_plate, lang='rus+eng') #
-        img_plate_string = convert_to_string(img_plate_string)
-        tf = max(tl - 1, 1)  # font thickness
-        t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
-        print(c1, c2)
-        # cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
-        if len(img_plate_string) > 0:
-            cv2.putText(img, f'plt: {img_plate_string}', (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
-
-
-def plot_one_blox_with_OCR_easy_ocr(x, img, color=None, label=None, line_thickness=3):
-    # Plots one bounding box on image img
-    tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
-    color = color or [random.randint(0, 255) for _ in range(3)]
     c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
-    if label:
-        img_plate = img[c1[1]:c2[1], c1[0]:c2[0]]
-        # img_plate = prepare_photo_for_OCR(img_plate)
-        img_plate_string = READER.readtext(img_plate, detail=0)
-        if len(img_plate_string) == 0:
-            img_plate_string = ''
-        else:
-            img_plate_string = img_plate_string[0]
-        # cv2.imshow('Amanda', img_plate)
-        # cv2.waitKey(10000)
-        cv2.destroyAllWindows()
-        print('----')
-        print(img_plate_string)
-        print('----')
-        img_plate_string = convert_to_string(img_plate_string)
-        tf = max(tl - 1, 1)  # font thickness
-        t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
-        # cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
-        cv2.putText(img, f'plt: {img_plate_string}', (c1[0], c1[1] - 2), cv2.FONT_HERSHEY_COMPLEX, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+    img_plate = img[c1[1]:c2[1], c1[0]:c2[0]]
+    img_plate = prepare_photo_for_OCR(img_plate)
+    img_plate_string = pt.image_to_string(img_plate, lang='eng') #
+    img_plate_string = f'plt: {convert_to_string(img_plate_string).upper()}'
+    tf = max(tl - 1, 1)  # font thickness
+    t_size = cv2.getTextSize(img_plate_string, 0, fontScale=tl / 3, thickness=tf)[0]
+    c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+    cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+    cv2.putText(img, img_plate_string, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+
+
+def plot_one_blox_with_OCR_easy_ocr(x, img, color, line_thickness=3):
+    """
+    Recognition of the car number plate based on EasyOCR.
+    Drawing one bounding box and OCR result
+    """
+    tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
+    c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
+    cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
+    img_plate = img[c1[1]:c2[1], c1[0]:c2[0]]
+    img_plate = prepare_photo_for_OCR(img_plate)
+    img_plate_string = ''.join(READER.readtext(img_plate, detail=0, width_ths=5, height_ths=3, ycenter_ths=3, slope_ths=4)) # [::-1]
+    img_plate_string = f'plt: {convert_to_string(img_plate_string).upper()}'
+    tf = max(tl - 1, 1)  # font thickness
+    t_size = cv2.getTextSize(img_plate_string, 0, fontScale=tl / 3, thickness=tf)[0]
+    c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+    cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+    cv2.putText(img, img_plate_string, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
 
 def prepare_photo_for_OCR(img):
@@ -135,7 +124,10 @@ def convert_to_string(plate_number):
     """
     plate_number = [symbol for symbol in list(plate_number) if symbol.isdigit() or symbol.isalpha()]
     plate_number = ''.join(plate_number)  # convert list_to_string
+    if plate_number == '':
+        plate_number = 'UNK'
     return plate_number
+    
     
 
 def plot_one_box_PIL(box, img, color=None, label=None, line_thickness=None):
