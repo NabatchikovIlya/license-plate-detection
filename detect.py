@@ -19,7 +19,7 @@ from utils.general import (
     set_logging,
     increment_path,
 )
-from utils.plots import plot_one_blox_with_OCR_easy_ocr, plot_one_blox_with_OCR_tesseract
+from utils.plots import plot_one_blox_with_OCR_easy_ocr
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 
 
