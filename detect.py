@@ -5,7 +5,6 @@ from pathlib import Path
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
-from numpy import random
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
@@ -20,7 +19,7 @@ from utils.general import (
     set_logging,
     increment_path,
 )
-from utils.plots import plot_one_box, plot_one_blox_with_OCR_easy_ocr, plot_one_blox_with_OCR_tesseract
+from utils.plots import plot_one_blox_with_OCR_easy_ocr, plot_one_blox_with_OCR_tesseract
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 
 
