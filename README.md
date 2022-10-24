@@ -9,7 +9,7 @@ sudo apt update
 sudo apt install -y zip htop screen libgl1-mesa-glx tesseract-ocr pipenv
   
 # clone repo:
-git cline https://github.com/NabatchikovIlya/license-plate-detection.git
+git clone https://github.com/NabatchikovIlya/license-plate-detection.git
 
 # create virtualenv:  
 pipenv install
