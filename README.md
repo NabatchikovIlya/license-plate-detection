@@ -47,8 +47,46 @@ Object detector + OCR system. \
 As a detector we used: YOLOv5 and YOLOv7 \
 As an OCR system we used: PyTesseract and EasyOCR
 
+## Example
+<p align="center"><img src="./inference/images/example.png" alt="detection" width="70%"></p>
+
 ## Contributors
 1. Шакиров Ренат
 2. Набатчиков Илья
 3. Могилевский Саша
 
+## Tree
+``` shell
+.gitignore
+LICENSE.md
+Pipfile
+Pipfile.lock
+README.md
+detect.py
+inference
+   |-- images
+   |   |-- test_range.jpg
+models
+   |-- __init__.py
+   |-- common.py
+   |-- experimental.py
+   |-- yolo.py
+notebooks
+   |-- train.ipynb
+requirements.txt
+utils
+   |-- __init__.py
+   |-- activations.py
+   |-- add_nms.py
+   |-- autoanchor.py
+   |-- aws
+   |-- datasets.py
+   |-- general.py
+   |-- google_app_engine
+   |-- google_utils.py
+   |-- loss.py
+   |-- metrics.py
+   |-- plots.py
+   |-- torch_utils.py
+   |-- wandb_logging
+``` 
