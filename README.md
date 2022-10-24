@@ -65,7 +65,11 @@ README.md
 detect.py
 inference
    |-- images
+   |   |-- example.png
    |   |-- test_range.jpg
+   |-- video
+   |   |-- example.MOV
+   |   |-- video.mp4
 models
    |-- __init__.py
    |-- common.py
